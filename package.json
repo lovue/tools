@@ -1,0 +1,22 @@
+{
+  "name": "@lovue/tools",
+  "version": "1.0.0",
+  "description": "Some tools for daily development.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lovue/tools.git"
+  },
+  "author": "lovue",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lovue/tools/issues"
+  },
+  "homepage": "https://github.com/lovue/tools#readme",
+  "files": [
+    "src"
+  ]
+}
