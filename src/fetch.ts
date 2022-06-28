@@ -1,3 +1,9 @@
+interface ResponseFields {
+  code: string
+  data: string
+  msg: string
+}
+
 let prefix = '/api'
 const headers = {}
 const errorCodes = {
@@ -45,6 +51,11 @@ const errorCodes = {
   504: '请求超时，请重试'
   /* End HTTP Status Code */
 }
+const responseFields: ResponseFields = {
+  code: 'code',
+  data: 'data',
+  msg: 'msg',
+}
 
 function startRequest (method: string, url: string, params?: Record<string, unknown> | FormData) {
   const options: RequestInit = {
@@ -69,21 +80,21 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
 
   return new Promise((resolve, reject) => {
     globalThis.fetch(request).then(response => response.json()).then(body => {
-      if (body.code === undefined) {
+      if (body[responseFields.code] === undefined) {
         reject(body)
         return
       }
 
-      if (body.code !== 0) {
+      if (body[responseFields.code] !== 0) {
         reject({
           status: 200,
-          code: body.code,
-          msg: errorCodes[body.code] || body.msg || body.message || body.error || 'Unknown Error'
+          [responseFields.code]: body[responseFields.code],
+          [responseFields.msg]: errorCodes[responseFields.code] || body[responseFields.msg] || 'Unknown Error'
         })
         return
       }
 
-      resolve(body.data || body.result)
+      resolve(body[responseFields.data])
     })
   })
 }
@@ -98,6 +109,11 @@ export default {
   setErrorCodes (codes: Record<string| number, string>) {
     for (const key in codes) {
       errorCodes[key] = codes[key]
+    }
+  },
+  setResponseFields (config: ResponseFields) {
+    for (const key in config) {
+      if (config[key]) responseFields[key] = config[key]
     }
   },
   get (url: string) {
