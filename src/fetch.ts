@@ -67,18 +67,18 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
 
   const request = new Request(_url, options)
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     globalThis.fetch(request).then(response => response.json()).then(body => {
       if (body.code === undefined) {
-        throw body
+        reject(body)
       }
 
       if (body.code !== 0) {
-        throw {
+        reject({
           status: 200,
           code: body.code,
           msg: errorCodes[body.code] || body.msg || body.message || body.error || 'Unknown Error'
-        }
+        })
       }
 
       resolve(body.data || body.result || 1)
