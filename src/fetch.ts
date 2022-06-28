@@ -71,6 +71,7 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
     globalThis.fetch(request).then(response => response.json()).then(body => {
       if (body.code === undefined) {
         reject(body)
+        return
       }
 
       if (body.code !== 0) {
@@ -79,9 +80,10 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
           code: body.code,
           msg: errorCodes[body.code] || body.msg || body.message || body.error || 'Unknown Error'
         })
+        return
       }
 
-      resolve(body.data || body.result || 1)
+      resolve(body.data || body.result)
     })
   })
 }
