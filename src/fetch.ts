@@ -80,16 +80,17 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
 
   return new Promise((resolve, reject) => {
     globalThis.fetch(request).then(response => response.json()).then(body => {
-      if (body[responseFields.code] === undefined) {
+      const responseCode = body[responseFields.code]
+      if (responseCode === undefined) {
         reject(body)
         return
       }
 
-      if (body[responseFields.code] !== 0) {
+      if (responseCode !== 0) {
         reject({
           status: 200,
-          [responseFields.code]: body[responseFields.code],
-          [responseFields.msg]: errorCodes[responseFields.code] || body[responseFields.msg] || 'Unknown Error'
+          [responseFields.code]: responseCode,
+          [responseFields.msg]: errorCodes[responseCode] || body[responseFields.msg] || 'Unknown Error'
         })
         return
       }
