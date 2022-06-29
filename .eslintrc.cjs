@@ -12,7 +12,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module'
   },
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.cjs', 'dist'],
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'eslint:recommended',
