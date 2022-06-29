@@ -2,6 +2,9 @@
   "name": "@lovue/tools",
   "version": "1.0.4",
   "description": "Some tools for daily development.",
+  "scripts": {
+    "build": "tsc"
+  },
   "type": "module",
   "exports": "./dist/index.js",
   "types": "./dist",
@@ -16,11 +19,21 @@
   },
   "homepage": "https://github.com/lovue/tools#readme",
   "files": [
-    "src",
     "dist/*.js",
     "dist/*.d.ts"
   ],
   "engines": {
     "node": ">= 16.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "typescript": "^4.7.4"
   }
 }

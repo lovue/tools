@@ -54,7 +54,7 @@ const errorCodes = {
 const responseFields: ResponseFields = {
   code: 'code',
   data: 'data',
-  msg: 'msg',
+  msg: 'msg'
 }
 
 function startRequest (method: string, url: string, params?: Record<string, unknown> | FormData) {
@@ -62,7 +62,7 @@ function startRequest (method: string, url: string, params?: Record<string, unkn
     method,
     credentials: 'same-origin',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       ...headers
     }
   }
