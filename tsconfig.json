@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2020",
     "module": "esnext",
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "declaration": false,
+    "declaration": true,
     "sourceMap": false,
     "incremental": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "lib": ["esnext", "dom"]
   },
   "include": ["src/*.ts"]
 }

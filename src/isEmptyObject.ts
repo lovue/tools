@@ -1,1 +1,1 @@
-export default obj => !Object.keys(obj).length
+export default obj => !globalThis.Object.keys(obj).length

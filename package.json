@@ -2,10 +2,9 @@
   "name": "@lovue/tools",
   "version": "1.0.4",
   "description": "Some tools for daily development.",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "jest"
-  },
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lovue/tools.git"
@@ -17,6 +16,11 @@
   },
   "homepage": "https://github.com/lovue/tools#readme",
   "files": [
-    "src"
-  ]
+    "src",
+    "dist/*.js",
+    "dist/*.d.ts"
+  ],
+  "engines": {
+    "node": ">= 16.15.0"
+  }
 }

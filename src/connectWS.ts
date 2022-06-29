@@ -8,7 +8,7 @@ export interface WsOption {
 export default (option: WsOption) => {
   console.log(`Connecting to ${option.uri} ...`)
 
-  const ws = new WebSocket(option.uri)
+  const ws = new globalThis.WebSocket(option.uri)
 
   ws.onopen = ev => {
     console.log('RTServer Connection Created!')

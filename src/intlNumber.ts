@@ -10,5 +10,5 @@
  * */
 
 export default (value: number, maximumFractionDigits = 6, minimumFractionDigits = 0) => {
-  return new Intl.NumberFormat(undefined, { maximumFractionDigits, minimumFractionDigits }).format(value)
+  return new globalThis.Intl.NumberFormat(undefined, { maximumFractionDigits, minimumFractionDigits }).format(value)
 }

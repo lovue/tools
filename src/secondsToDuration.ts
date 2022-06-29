@@ -1,4 +1,4 @@
-import padNumber from './padNumber'
+import padNumber from './padNumber.js'
 
 export default (num: number, type = 1) => {
   if (num <= 0) return ''

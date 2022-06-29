@@ -1,6 +1,6 @@
 export default (name: string) => {
-  const searchString = new URL(globalThis.location.href).search
-  const params = new URLSearchParams(searchString)
+  const searchString = new globalThis.URL(globalThis.location.href).search
+  const params = new globalThis.URLSearchParams(searchString)
 
   return params.get(name)
 }

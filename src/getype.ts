@@ -10,6 +10,6 @@
  * */
 
 export default (value: unknown) => {
-  const type = Object.prototype.toString.call(value)
+  const type = globalThis.Object.prototype.toString.call(value)
   return type.replace(/\[object\s|]/g, '').toLowerCase()
 }
