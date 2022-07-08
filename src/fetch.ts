@@ -6,7 +6,7 @@ interface ResponseFields {
 
 let prefix = '/api'
 const headers = {}
-const errorCodes = {
+export const errorCodes = {
   101: '该用户已存在',
   102: '验证码错误',
   103: '验证码已过期',
