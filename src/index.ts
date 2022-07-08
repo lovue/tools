@@ -1,6 +1,6 @@
 export { default as adjustImgShape } from './adjustImgShape.js'
 export { default as connectWS } from './connectWS.js'
-export { default as fetch, errorCodes } from './fetch.js'
+export { default as fetch, errorMessages, ERROR_CODES } from './fetch.js'
 export { default as generateVerifyCode } from './generateVerifyCode.js'
 export { default as getCookie } from './getCookie.js'
 export { default as getNumberArray } from './getNumberArray.js'
