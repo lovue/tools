@@ -1,4 +1,4 @@
-export default function (codeLength = 6) {
+export default (codeLength = 6) => {
   const chars = '0123456789'
   let code = ''
 

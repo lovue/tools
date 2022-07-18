@@ -1,7 +1,7 @@
 import isEmpty from './isEmpty.js'
 
 function parse (cookie: string) {
-  const result = {}
+  const result: Record<string, string> = {}
 
   cookie.split(';').forEach(entry => {
     const info = entry.split('=')
@@ -11,7 +11,7 @@ function parse (cookie: string) {
   return result
 }
 
-export default function (cookie: string, name: string): string {
+export default (cookie: string, name: string) => {
   if (isEmpty(cookie)) return ''
   return parse(cookie)[name]
 }
