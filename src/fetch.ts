@@ -102,7 +102,7 @@ export const errorMessages = {
   /* End HTTP Status Code */
 }
 
-function startRequest (method: string, url: string, params?: Record<string, unknown> | FormData) {
+function startRequest<T> (method: string, url: string, params?: Record<string, unknown> | FormData): Promise<T> {
   const options: RequestInit = {
     method,
     credentials: 'same-origin',
@@ -162,19 +162,19 @@ export default {
       if (config[key]) responseFields[key] = config[key]
     }
   },
-  get (url: string) {
-    return startRequest('get', url)
+  get<T> (url: string) {
+    return startRequest<T>('get', url)
   },
-  post (url: string, params: Record<string, unknown> | FormData) {
-    return startRequest('post', url, params)
+  post<T> (url: string, params: Record<string, unknown> | FormData) {
+    return startRequest<T>('post', url, params)
   },
-  put (url: string, params: Record<string, unknown> | FormData) {
-    return startRequest('put', url, params)
+  put<T> (url: string, params: Record<string, unknown> | FormData) {
+    return startRequest<T>('put', url, params)
   },
-  patch (url: string, params: Record<string, unknown> | FormData) {
-    return startRequest('patch', url, params)
+  patch<T> (url: string, params: Record<string, unknown> | FormData) {
+    return startRequest<T>('patch', url, params)
   },
-  delete (url: string) {
-    return startRequest('delete', url)
+  delete<T> (url: string) {
+    return startRequest<T>('delete', url)
   }
 }
