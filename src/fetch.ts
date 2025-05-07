@@ -114,11 +114,13 @@ function startRequest<T> (method: string, url: string, params?: Record<string, u
     }
   }
 
-  if (params instanceof FormData) {
-    options.body = params
-  } else {
-    options.headers['Content-Type'] = 'application/json'
-    options.body = JSON.stringify(params)
+  if (params) {
+    if (params instanceof FormData) {
+      options.body = params
+    } else {
+      options.headers['Content-Type'] = 'application/json'
+      options.body = JSON.stringify(params)
+    }
   }
 
   const _url = url.startsWith('/') || url.startsWith('http') ? url : `${prefix}/${url}`
