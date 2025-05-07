@@ -1,17 +1,24 @@
 import isEmpty from './isEmpty.js'
+import merge from './merge.js'
 
-interface ResponseFields {
-  code: string
-  data: string
-  msg: string
+interface GlobalConfigs {
+  prefix: string
+  headers: Record<string, unknown>
+  responseFields: {
+    code: string
+    data: string
+    msg: string
+  }
 }
 
-let prefix = '/api'
-const headers = {}
-const responseFields: ResponseFields = {
-  code: 'code',
-  data: 'data',
-  msg: 'msg',
+const globalConfigs: GlobalConfigs = {
+  prefix: '/api',
+  headers: {},
+  responseFields: {
+    code: 'code',
+    data: 'data',
+    msg: 'msg',
+  }
 }
 
 export const ERROR_CODES = {
@@ -110,7 +117,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
     credentials: 'same-origin',
     headers: {
       Accept: 'application/json',
-      ...headers,
+      ...globalConfigs.headers,
     },
   }
 
@@ -123,7 +130,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
     }
   }
 
-  const _url = (url.startsWith('/') || url.startsWith('http')) ? url : `${prefix}/${url}`
+  const _url = (url.startsWith('/') || url.startsWith('http')) ? url : `${globalConfigs.prefix}/${url}`
 
   const request = new Request(_url, options)
 
@@ -146,7 +153,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
         return response.json()
       })
       .then(body => {
-        const responseCode = body[responseFields.code]
+        const responseCode = body[globalConfigs.responseFields.code]
         if (responseCode === undefined) {
           reject(body)
           return
@@ -155,32 +162,24 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
         if (responseCode !== 0) {
           reject({
             status: 200,
-            [responseFields.code]: responseCode,
-            [responseFields.msg]: errorMessages[responseCode] || body[responseFields.msg] || 'Unknown Error',
+            [globalConfigs.responseFields.code]: responseCode,
+            [globalConfigs.responseFields.msg]: errorMessages[responseCode] || body[globalConfigs.responseFields.msg] || 'Unknown Error',
           })
           return
         }
 
-        resolve(body[responseFields.data])
+        resolve(body[globalConfigs.responseFields.data])
       })
   })
 }
 
-export default {
-  prefix(_prefix: string) {
-    prefix = _prefix
-  },
-  setHeader(key: string, value: unknown) {
-    headers[key] = value
+const $fetch = {
+  setConfigs(options: GlobalConfigs) {
+    merge((globalConfigs as unknown as Record<string, unknown>), (options as unknown as Record<string, unknown>))
   },
   setErrorMessages(codes: Record<string | number, string>) {
     for (const key in codes) {
       errorMessages[key] = codes[key]
-    }
-  },
-  setResponseFields(config: ResponseFields) {
-    for (const key in config) {
-      if (config[key]) responseFields[key] = config[key]
     }
   },
   get<T>(url: string, params?: Record<string, unknown>) {
@@ -193,16 +192,18 @@ export default {
     }
     return startRequest<T>('get', url)
   },
-  post<T>(url: string, params: Record<string, unknown> | FormData) {
+  post<T>(url: string, params?: Record<string, unknown> | FormData) {
     return startRequest<T>('post', url, params)
   },
-  put<T>(url: string, params: Record<string, unknown> | FormData) {
+  put<T>(url: string, params?: Record<string, unknown> | FormData) {
     return startRequest<T>('put', url, params)
   },
-  patch<T>(url: string, params: Record<string, unknown> | FormData) {
+  patch<T>(url: string, params?: Record<string, unknown> | FormData) {
     return startRequest<T>('patch', url, params)
   },
   delete<T>(url: string) {
     return startRequest<T>('delete', url)
   },
 }
+
+export default $fetch
