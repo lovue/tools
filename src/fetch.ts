@@ -11,7 +11,7 @@ const headers = {}
 const responseFields: ResponseFields = {
   code: 'code',
   data: 'data',
-  msg: 'msg'
+  msg: 'msg',
 }
 
 export const ERROR_CODES = {
@@ -55,7 +55,7 @@ export const ERROR_CODES = {
   METHOD_NOT_ALLOWED: 405,
   INTERVAL_SERVER_ERROR: 500,
   BAD_GATEWAY: 502,
-  HTTP_REQUEST_TIMEOUT: 504
+  HTTP_REQUEST_TIMEOUT: 504,
 }
 
 export const errorMessages = {
@@ -100,18 +100,18 @@ export const errorMessages = {
   [ERROR_CODES.METHOD_NOT_ALLOWED]: '请求方法不允许',
   [ERROR_CODES.INTERVAL_SERVER_ERROR]: '内部服务器发生错误',
   [ERROR_CODES.BAD_GATEWAY]: '后台服务未启动',
-  [ERROR_CODES.HTTP_REQUEST_TIMEOUT]: '请求超时，请重试'
+  [ERROR_CODES.HTTP_REQUEST_TIMEOUT]: '请求超时，请重试',
   /* End HTTP Status Code */
 }
 
-function startRequest<T> (method: string, url: string, params?: Record<string, unknown> | FormData): Promise<T> {
+function startRequest<T>(method: string, url: string, params?: Record<string, unknown> | FormData): Promise<T> {
   const options: RequestInit = {
     method,
     credentials: 'same-origin',
     headers: {
       Accept: 'application/json',
-      ...headers
-    }
+      ...headers,
+    },
   }
 
   if (params) {
@@ -123,50 +123,67 @@ function startRequest<T> (method: string, url: string, params?: Record<string, u
     }
   }
 
-  const _url = url.startsWith('/') || url.startsWith('http') ? url : `${prefix}/${url}`
+  const _url = (url.startsWith('/') || url.startsWith('http')) ? url : `${prefix}/${url}`
 
   const request = new Request(_url, options)
 
   return new Promise((resolve, reject) => {
-    globalThis.fetch(request).then(response => response.json()).then(body => {
-      const responseCode = body[responseFields.code]
-      if (responseCode === undefined) {
-        reject(body)
-        return
-      }
+    globalThis
+      .fetch(request)
+      .then(response => {
+        if (![200, 201].includes(response.status)) {
+          response.text().then(text => {
+            reject({
+              status: response.status,
+              method: request.method,
+              msg: text,
+            })
+          })
 
-      if (responseCode !== 0) {
-        reject({
-          status: 200,
-          [responseFields.code]: responseCode,
-          [responseFields.msg]: errorMessages[responseCode] || body[responseFields.msg] || 'Unknown Error'
-        })
-        return
-      }
+          return
+        }
 
-      resolve(body[responseFields.data])
-    })
+        return response.json()
+      })
+      .then(body => {
+        const responseCode = body[responseFields.code]
+        if (responseCode === undefined) {
+          reject(body)
+          return
+        }
+
+        if (responseCode !== 0) {
+          reject({
+            status: 200,
+            [responseFields.code]: responseCode,
+            [responseFields.msg]: errorMessages[responseCode] || body[responseFields.msg] || 'Unknown Error',
+          })
+          return
+        }
+
+        resolve(body[responseFields.data])
+      })
   })
 }
 
 export default {
-  prefix (_prefix: string) {
+  prefix(_prefix: string) {
     prefix = _prefix
   },
-  setHeader (key: string, value: unknown) {
+  setHeader(key: string, value: unknown) {
     headers[key] = value
   },
-  setErrorMessages (codes: Record<string| number, string>) {
+  setErrorMessages(codes: Record<string | number, string>) {
     for (const key in codes) {
       errorMessages[key] = codes[key]
     }
   },
-  setResponseFields (config: ResponseFields) {
+  setResponseFields(config: ResponseFields) {
     for (const key in config) {
       if (config[key]) responseFields[key] = config[key]
     }
   },
-  get<T> (url: string, params?: Record<string, unknown>) {
+  get<T>(url: string, params?: Record<string, unknown>) {
     if (params) {
       const query = Object.entries(params)
         .filter(([key, value]) => !isEmpty(value))
@@ -176,16 +193,16 @@ export default {
     }
     return startRequest<T>('get', url)
   },
-  post<T> (url: string, params: Record<string, unknown> | FormData) {
+  post<T>(url: string, params: Record<string, unknown> | FormData) {
     return startRequest<T>('post', url, params)
   },
-  put<T> (url: string, params: Record<string, unknown> | FormData) {
+  put<T>(url: string, params: Record<string, unknown> | FormData) {
     return startRequest<T>('put', url, params)
   },
-  patch<T> (url: string, params: Record<string, unknown> | FormData) {
+  patch<T>(url: string, params: Record<string, unknown> | FormData) {
     return startRequest<T>('patch', url, params)
   },
-  delete<T> (url: string) {
+  delete<T>(url: string) {
     return startRequest<T>('delete', url)
-  }
+  },
 }
