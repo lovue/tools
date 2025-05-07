@@ -18,7 +18,7 @@ const globalConfigs: GlobalConfigs = {
     code: 'code',
     data: 'data',
     msg: 'msg',
-  }
+  },
 }
 
 export const ERROR_CODES = {
@@ -137,9 +137,9 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
   return new Promise((resolve, reject) => {
     globalThis
       .fetch(request)
-      .then(response => {
+      .then((response) => {
         if (![200, 201].includes(response.status)) {
-          response.text().then(text => {
+          response.text().then((text) => {
             reject({
               status: response.status,
               method: request.method,
@@ -152,7 +152,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
 
         return response.json()
       })
-      .then(body => {
+      .then((body) => {
         const responseCode = body[globalConfigs.responseFields.code]
         if (responseCode === undefined) {
           reject(body)
@@ -173,7 +173,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
   })
 }
 
-const $fetch = {
+export default {
   setConfigs(options: GlobalConfigs) {
     merge((globalConfigs as unknown as Record<string, unknown>), (options as unknown as Record<string, unknown>))
   },
@@ -205,5 +205,3 @@ const $fetch = {
     return startRequest<T>('delete', url)
   },
 }
-
-export default $fetch

@@ -1,9 +1,9 @@
 import isEmpty from './isEmpty.js'
 
-function parse (cookie: string) {
+function parse(cookie: string) {
   const result: Record<string, string> = {}
 
-  cookie.split(';').forEach(entry => {
+  cookie.split(';').forEach((entry) => {
     const info = entry.split('=')
     result[info[0].trim()] = info[1]
   })

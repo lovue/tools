@@ -1,4 +1,4 @@
-function merge (target: Record<string, unknown>, source: Record<string, unknown>) {
+function merge(target: Record<string, unknown>, source: Record<string, unknown>) {
   for (const sourceKey in source) {
     if (typeof source[sourceKey] === 'object') {
       if (target[sourceKey] === undefined) {

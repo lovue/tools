@@ -10,29 +10,33 @@ export default (option: WsOption) => {
 
   const ws = new globalThis.WebSocket(option.uri)
 
-  ws.onopen = ev => {
+  ws.onopen = (ev) => {
     console.log('RTServer Connection Created!')
 
-    option.type && ws.send(JSON.stringify({
-      type: option.type,
-      data: 'Set Request Type'
-    }))
+    if (option.type) {
+      ws.send(JSON.stringify({
+        type: option.type,
+        data: 'Set Request Type',
+      }))
+    }
 
-    option.host && ws.send(JSON.stringify({
-      type: option.type,
-      data: option.host
-    }))
+    if (option.host) {
+      ws.send(JSON.stringify({
+        type: option.type,
+        data: option.host,
+      }))
+    }
   }
 
-  ws.onmessage = ev => {
+  ws.onmessage = (ev) => {
     option.receive(ev.data)
   }
 
-  ws.onclose = ev => {
+  ws.onclose = (ev) => {
     console.log('RTServer Connection Closed!')
   }
 
-  ws.onerror = ev => {
+  ws.onerror = (ev) => {
     console.log('RTServer Connection Broken!')
     throw ev
   }
