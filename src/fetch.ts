@@ -1,3 +1,5 @@
+import isEmpty from './isEmpty.js'
+
 interface ResponseFields {
   code: string
   data: string
@@ -162,7 +164,14 @@ export default {
       if (config[key]) responseFields[key] = config[key]
     }
   },
-  get<T> (url: string) {
+  get<T> (url: string, params?: Record<string, unknown>) {
+    if (params) {
+      const query = Object.entries(params)
+        .filter(([key, value]) => !isEmpty(value))
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')
+      url += `?${query}`
+    }
     return startRequest<T>('get', url)
   },
   post<T> (url: string, params: Record<string, unknown> | FormData) {
