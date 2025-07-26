@@ -153,6 +153,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
         return response.json()
       })
       .then((body) => {
+        if (body === undefined) return
         const responseCode = body[globalConfigs.responseFields.code]
         if (responseCode === undefined) {
           reject(body)
