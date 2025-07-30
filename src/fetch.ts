@@ -175,7 +175,7 @@ function startRequest<T>(method: string, url: string, params?: Record<string, un
 }
 
 export default {
-  setConfigs(options: GlobalConfigs) {
+  setConfigs(options: Partial<GlobalConfigs>) {
     merge((globalConfigs as unknown as Record<string, unknown>), (options as unknown as Record<string, unknown>))
   },
   setErrorMessages(codes: Record<string | number, string>) {
