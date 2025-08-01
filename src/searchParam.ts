@@ -10,7 +10,7 @@ export function getSearchParam(name: string, url?: string) {
 export function getQueryString(queries: Record<string, string>) {
   const _queries = {}
 
-  for (const queriesKey in _queries) {
+  for (const queriesKey in queries) {
     if (isEmpty(_queries[queriesKey])) continue
 
     _queries[queriesKey] = queries[queriesKey]
