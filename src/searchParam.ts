@@ -7,11 +7,14 @@ export function getSearchParam(name: string, url?: string) {
   return params.get(name)
 }
 
-export function getQueryString(queries: Record<string, string>) {
+export function getQueryString(queries: Record<string, string>, allowNull?: boolean) {
   const _queries = {}
 
   for (const queriesKey in queries) {
-    if (isEmpty(_queries[queriesKey])) continue
+    if (isEmpty(queries[queriesKey])) {
+      if (!allowNull) continue
+      if (queries[queriesKey] !== null) continue
+    }
 
     _queries[queriesKey] = queries[queriesKey]
   }
